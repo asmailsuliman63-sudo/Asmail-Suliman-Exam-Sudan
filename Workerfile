@@ -1,0 +1,85 @@
+name: Rename PDF Files
+
+on:
+  workflow_dispatch:
+
+jobs:
+  rename-files:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Rename PDF files
+        run: |
+          python <<EOF
+          import os
+          import re
+
+          def normalize(name):
+              lower = name.lower()
+
+              if "arabic" in lower or "عربي" in lower:
+                  subject = "arabic"
+
+              elif "english" in lower or "انجليزي" in lower:
+                  subject = "english"
+
+              elif "حياء" in lower or "biology" in lower:
+                  subject = "biology"
+
+              elif "كيمياء" in lower or "chemistry" in lower:
+                  subject = "chemistry"
+
+              elif "فيزياء" in lower or "physics" in lower:
+                  subject = "physics"
+
+              elif "أساسية" in lower or "basic" in lower:
+                  subject = "math-basic"
+
+              elif "متقدمة" in lower or "advance" in lower:
+                  subject = "math-advance"
+
+              elif "جغرافيا" in lower:
+                  subject = "geography"
+
+              elif "تاريخ" in lower or "history" in lower:
+                  subject = "history"
+
+              elif "كمبيوتر" in lower or "computer" in lower:
+                  subject = "computer"
+
+              elif "هندسة" in lower or "engineering" in lower:
+                  subject = "engineering"
+
+              elif "اسلام" in lower or "islamic" in lower:
+                  subject = "islamic"
+
+              else:
+                  subject = "other"
+
+              year = re.findall(r'20\\d{2}', lower)
+              year = year[0] if year else "unknown"
+
+              return f"{subject}-{year}.pdf"
+
+          for file in os.listdir():
+              if file.endswith(".pdf"):
+                  new_name = normalize(file)
+
+                  if file != new_name:
+                      print(f"{file} -> {new_name}")
+                      os.rename(file, new_name)
+
+          EOF
+
+      - name: Commit renamed files
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+
+          git add .
+          git commit -m "Rename PDF files automatically" || echo "No changes"
+
+          git push
