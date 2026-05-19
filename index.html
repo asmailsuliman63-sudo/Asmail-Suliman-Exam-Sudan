@@ -1,1 +1,99 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>امتحانات السودان</title>
 
+<style>
+body{
+font-family: Arial;
+direction: rtl;
+background:#f4f4f4;
+text-align:center;
+padding:20px;
+}
+
+h1{color:#00695c;}
+
+.file{
+background:white;
+margin:10px auto;
+padding:12px;
+border-radius:8px;
+box-shadow:0 0 5px #ccc;
+width:90%;
+text-align:right;
+}
+
+a{
+text-decoration:none;
+color:#1565c0;
+font-size:16px;
+}
+
+input{
+width:90%;
+padding:10px;
+margin:10px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>📚 امتحانات السودان 2003 - 2024</h1>
+
+<input type="text" id="search" onkeyup="filter()" placeholder="ابحث عن مادة أو سنة...">
+
+<div id="list">جاري التحميل...</div>
+
+<script>
+
+const repo = "asmailsuliman63-sudo/Asmail-Suliman-Exam-Sudan";
+
+let allFiles = [];
+
+async function loadFiles(){
+let url = `https://api.github.com/repos/${repo}/contents/`;
+
+let res = await fetch(url);
+let data = await res.json();
+
+allFiles = data.filter(f => f.name.endsWith(".pdf"));
+
+showFiles(allFiles);
+}
+
+function showFiles(files){
+let list = document.getElementById("list");
+list.innerHTML = "";
+
+files.forEach(f => {
+let div = document.createElement("div");
+div.className = "file";
+
+div.innerHTML = `
+<a href="${f.name}" target="_blank">📄 ${f.name}</a>
+`;
+
+list.appendChild(div);
+});
+}
+
+function filter(){
+let value = document.getElementById("search").value.toLowerCase();
+
+let filtered = allFiles.filter(f =>
+f.name.toLowerCase().includes(value)
+);
+
+showFiles(filtered);
+}
+
+loadFiles();
+
+</script>
+
+</body>
+</html>
