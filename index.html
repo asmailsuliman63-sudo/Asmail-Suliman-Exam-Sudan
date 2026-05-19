@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>امتحانات الشهادة السودانية</title>
+<title>امتحانات السودان</title>
 
 <style>
 body{
 font-family: Arial;
-background:#f2f2f2;
+direction: rtl;
+background:#f4f4f4;
 text-align:center;
-direction:rtl;
 padding:20px;
 }
 
@@ -18,68 +18,80 @@ h1{
 color:#00695c;
 }
 
-.subject{
+input{
+width:90%;
+padding:10px;
+margin:10px 0;
+font-size:16px;
+}
+
+.file{
 background:white;
-padding:15px;
-margin:10px;
-border-radius:10px;
+margin:10px auto;
+padding:12px;
+border-radius:8px;
 box-shadow:0 0 5px #ccc;
+width:90%;
+text-align:right;
 }
 
 a{
 text-decoration:none;
 color:#1565c0;
-font-size:18px;
+font-size:16px;
 }
 </style>
 </head>
 
 <body>
 
-<h1>
-امتحانات الشهادة السودانية
-2003 - 2024
-</h1>
+<h1>📚 مكتبة امتحانات السودان 2003 - 2024</h1>
 
-<div class="subject">
-<a href="#">اللغة العربية</a>
+<input type="text" id="search" onkeyup="filterFiles()" placeholder="ابحث عن مادة أو سنة...">
+
+<div id="list">
+
+<!-- الملفات ستظهر هنا -->
+
 </div>
 
-<div class="subject">
-<a href="#">اللغة الإنجليزية</a>
-</div>
+<script>
+// قائمة الملفات (GitHub سيستبدلها أو يمكنك تحديثها لاحقًا)
+const files = [
+"arabic-2005.pdf",
+"arabic-2006.pdf",
+"english-2005.pdf",
+"physics-2010.pdf",
+"chemistry-2015.pdf",
+"biology-2018.pdf",
+"math-basic-2012.pdf",
+"math-advance-2020.pdf"
+];
 
-<div class="subject">
-<a href="#">الرياضيات المتقدمة</a>
-</div>
+const list = document.getElementById("list");
 
-<div class="subject">
-<a href="#">الرياضيات الأساسية</a>
-</div>
+function loadFiles(){
+list.innerHTML = "";
+files.forEach(f => {
+let div = document.createElement("div");
+div.className = "file";
+div.innerHTML = `<a href="${f}" target="_blank">📄 ${f}</a>`;
+list.appendChild(div);
+});
+}
 
-<div class="subject">
-<a href="#">الفيزياء</a>
-</div>
+function filterFiles(){
+let value = document.getElementById("search").value.toLowerCase();
+let items = document.getElementsByClassName("file");
 
-<div class="subject">
-<a href="#">الكيمياء</a>
-</div>
+for(let i=0;i<items.length;i++){
+let text = items[i].innerText.toLowerCase();
+items[i].style.display = text.includes(value) ? "block" : "none";
+}
+}
 
-<div class="subject">
-<a href="#">الأحياء</a>
-</div>
-
-<div class="subject">
-<a href="#">الحاسوب</a>
-</div>
-
-<div class="subject">
-<a href="#">الجغرافيا</a>
-</div>
-
-<div class="subject">
-<a href="#">التاريخ</a>
-</div>
+loadFiles();
+</script>
 
 </body>
 </html>
