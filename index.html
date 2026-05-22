@@ -2,35 +2,345 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>امتحانات السودان</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>منصة امتحانات السودان</title>
+
 <style>
-body{font-family:Arial;direction:rtl;text-align:center;background:#f4f4f4;padding:20px}
-.file{background:#fff;margin:10px auto;padding:12px;border-radius:8px;width:90%}
-a{text-decoration:none;color:blue}
+
+body{
+font-family:Arial;
+background:#f2f2f2;
+margin:0;
+direction:rtl;
+}
+
+header{
+background:#0d47a1;
+color:white;
+padding:20px;
+text-align:center;
+font-size:30px;
+}
+
+.container{
+padding:15px;
+}
+
+.section{
+background:white;
+margin-bottom:20px;
+padding:15px;
+border-radius:10px;
+box-shadow:0 2px 5px rgba(0,0,0,0.1);
+}
+
+.section h2{
+margin-top:0;
+color:#0d47a1;
+}
+
+button{
+margin:5px;
+padding:10px 15px;
+border:none;
+border-radius:8px;
+background:#1976d2;
+color:white;
+cursor:pointer;
+font-size:15px;
+}
+
+button:hover{
+background:#0d47a1;
+}
+
+iframe{
+width:100%;
+height:700px;
+border:none;
+margin-top:20px;
+background:white;
+border-radius:10px;
+}
+
 </style>
 </head>
 
 <body>
 
-<h2>📚 امتحانات السودان</h2>
+<header>
+منصة إسماعيل سليمان حسن لامتحانات السودان
+</header>
 
-<div class="file">
-<a target="_blank" href="https://raw.githubusercontent.com/asmailsuliman63-sudo/Asmail-Suliman-Exam-Sudan/main/arabic-2005.pdf">
-Arabic 2005
-</a>
-</div>
+<div class="container" id="content"></div>
 
-<div class="file">
-<a target="_blank" href="https://raw.githubusercontent.com/asmailsuliman63-sudo/Asmail-Suliman-Exam-Sudan/main/english10.pdf">
-English
-</a>
-</div>
+<iframe id="viewer"></iframe>
 
-<div class="file">
-<a target="_blank" href="https://raw.githubusercontent.com/asmailsuliman63-sudo/Asmail-Suliman-Exam-Sudan/main/physics-2020.pdf">
-Physics
-</a>
-</div>
+<script>
+
+const repo =
+"https://raw.githubusercontent.com/asmailsuliman63-sudo/Ismail-Suliman-Hassan-Exam-Sudan/main/";
+
+const exams = {
+
+"التربية الإسلامية":[
+"islamic-2003.pdf",
+"islamic-2004.pdf",
+"islamic-2006.pdf",
+"islamic-2007.pdf",
+"islamic-2008.pdf",
+"islamic-2011.pdf",
+"islamic-2012.pdf",
+"islamic-2013.pdf",
+"islamic-2014.pdf",
+"islamic-2015.pdf",
+"islamic-2016.pdf",
+"islamic-2017.pdf",
+"islamic-2019.pdf",
+"islamic-2020.pdf",
+"islamic-2023.pdf",
+"islamic-2024.pdf"
+],
+
+"اللغة العربية":[
+"ملف PDF عربي-2005",
+"ملف PDF عربي-2006",
+"ملف PDF عربي-2007",
+"ملف PDF عربي-2008",
+"ملف PDF عربي-2011",
+"ملف PDF عربي-2012",
+"ملف PDF عربي-2013",
+"ملف PDF عربي-2014",
+"ملف PDF عربي-2015",
+"ملف PDF عربي-2016",
+"ملف PDF عربي-2017",
+"ملف PDF عربي-2018",
+"ملف PDF عربي-2019",
+"arabic-2020.pdf",
+"ملف PDF عربي-2022",
+"ملف PDF عربي-2023",
+"ملف PDF عربي-2024",
+"arabic-22004.pdf",
+"arabic-2.pdf",
+"arabic-3.pdf",
+"arabic-33.pdf"
+],
+
+"اللغة الإنجليزية":[
+"english-2004.pdf",
+"english-2005.pdf",
+"english-2006.pdf",
+"english-2007.pdf",
+"english-2008.pdf",
+"english-2011.pdf",
+"english-2012.pdf",
+"english-2013.pdf",
+"english-2014.pdf",
+"english-2015.pdf",
+"english-2016.pdf",
+"english-2017.pdf",
+"english-2018.pdf",
+"english-2019.pdf",
+"english-2020.pdf",
+"english-2022.pdf",
+"english-2023.pdf",
+"english-2024.pdf"
+],
+
+"الرياضيات الأساسية":[
+"math-basic-2004.pdf",
+"math-basic-2005.pdf",
+"math-basic-2006.pdf",
+"math-basic-2007.pdf",
+"math-basic-2008.pdf",
+"math-basic-2011.pdf",
+"math-basic-2012.pdf",
+"math-basic-2013.pdf",
+"math-basic-2014.pdf",
+"math-basic-2015.pdf",
+"math-basic-2016.pdf",
+"math-basic-2017.pdf",
+"math-basic-2018.pdf",
+"math-basic-2020.pdf",
+"math-basic-2023.pdf",
+"math-badic-2024.pdf"
+],
+
+"الرياضيات المتخصصة":[
+"math-advance-2004.pdf",
+"math-advance-2005.pdf",
+"math-advance-2006.pdf",
+"math-advance-2007.pdf",
+"math-advance-2008.pdf",
+"math-advance-2011.pdf",
+"math-advance-2012.pdf",
+"math-advance-2013.pdf",
+"math-advance-2014.pdf",
+"math-advance-2015.pdf",
+"math-advance-2016.pdf",
+"math-advance-2017.pdf",
+"math-advance-2018.pdf",
+"math-advance-2019.pdf",
+"math-advance-2020.pdf",
+"math-advance-2022.pdf",
+"math-advance-2023.pdf",
+"math-advanced-2024.pdf"
+],
+
+"الفيزياء":[
+"physics-2004.pdf",
+"physics-2005.pdf",
+"physics-2006.pdf",
+"physics-2007.pdf",
+"physics-2008.pdf",
+"physics-2011.pdf",
+"physics-2012.pdf",
+"physics-2013.pdf",
+"physics-2014.pdf",
+"physics-2015.pdf",
+"physics-2016.pdf",
+"physics-2017.pdf",
+"physics-2018.pdf",
+"physics-2019.pdf",
+"physics-2020.pdf",
+"physics-2022.pdf",
+"physics-2023.pdf",
+"physics-2024.pdf"
+],
+
+"الكيمياء":[
+"الكيمياء-2004.pdf",
+"ملف الكيمياء - 2006.pdf",
+"ملف الكيمياء - 2007.pdf",
+"الكيمياء-2008.pdf",
+"ملف الكيمياء - 2012.pdf",
+"ملف الكيمياء - 2014.pdf",
+"الكيمياء-2020.pdf",
+"ملف الكيمياء - 2022.pdf",
+"ملف الكيمياء - 2023.pdf",
+"ملف الكيمياء - 2024.pdf"
+],
+
+"الأحياء":[
+"علم الأحياء - 2004.pdf",
+"ملف PDF لعلم الأحياء - 2005",
+"ملف PDF لعلم الأحياء - 2006",
+"علم الأحياء - 2007.pdf",
+"ملف PDF لعلم الأحياء - 2008",
+"ملف PDF لعلم الأحياء - 2012",
+"علم الأحياء - 2013.pdf",
+"ملف PDF لعلم الأحياء - 2014",
+"ملف PDF لعلم الأحياء - 2015",
+"ملف PDF لعلم الأحياء - 2016",
+"ملف علم الأحياء - 2017.pdf",
+"علم الأحياء - 2018.pdf",
+"ملف PDF لعلم الأحياء - 2019",
+"ملف PDF لعلم الأحياء - 2022",
+"ملف PDF لعلم الأحياء - 2023",
+"ملف PDF لعلم الأحياء - 2024",
+"ملف PDF لعلم الأحياء - 22022",
+"ملف الأحياء - 3.pdf"
+],
+
+"التاريخ":[
+"تاريخ-2012.pdf",
+"history-2014.pdf",
+"تاريخ-2015.pdf",
+"history-2017.pdf",
+"history-2020.pdf",
+"تاريخ-2023.pdf",
+"تاريخ-2024.pdf"
+],
+
+"الجغرافيا":[
+"الجغرافيا-2010.pdf",
+"الجغرافيا-2012.pdf",
+"الجغرافيا-2015.pdf",
+"الجغرافيا-2016.pdf",
+"الجغرافيا-2017.pdf",
+"الجغرافيا-2019.pdf",
+"الجغرافيا-2020.pdf",
+"الجغرافيا-2024.pdf"
+],
+
+"الدراسات الإسلامية":[
+"dislamic-2008.pdf",
+"dislamic-2012.pdf",
+"dislamic-2014.pdf",
+"dislamic-2015.pdf",
+"dislamic-2016.pdf",
+"dislamic-2017.pdf",
+"dislamic-2018.pdf",
+"dislamic-2019.pdf",
+"dislamic-2020.pdf",
+"dislamic-2023.pdf",
+"dislamic-2024.pdf",
+"dislamic-22022.pdf"
+],
+
+"علوم الحاسوب":[
+"computer-2012.pdf",
+"computer-2013.pdf",
+"computer-2015.pdf",
+"computer-2016.pdf",
+"computer-2017.pdf",
+"computer-2020.pdf",
+"computer-2023.pdf",
+"computer-2024.pdf"
+],
+
+"العلوم الهندسية":[
+"هندسة-2011.pdf",
+"هندسة-2012.pdf",
+"هندسة-2013.pdf",
+"هندسة-2014.pdf",
+"هندسة-2015.pdf",
+"هندسة-2016.pdf",
+"هندسة-2017.pdf",
+"هندسة-2018.pdf",
+"هندسة-2019.pdf",
+"engineering-2020.pdf",
+"هندسة-2023.pdf",
+"هندسة-2024.pdf",
+"engineering-22022.pdf"
+]
+
+};
+
+const content = document.getElementById("content");
+
+for(let subject in exams){
+
+let section = document.createElement("div");
+section.className = "section";
+
+let title = document.createElement("h2");
+title.innerText = subject;
+
+section.appendChild(title);
+
+exams[subject].forEach(file=>{
+
+let btn = document.createElement("button");
+
+btn.innerText = file.replace(".pdf","");
+
+btn.onclick = ()=>{
+
+document.getElementById("viewer").src =
+repo + encodeURIComponent(file);
+
+};
+
+section.appendChild(btn);
+
+});
+
+content.appendChild(section);
+
+}
+
+</script>
 
 </body>
-</html>
+  </html>
